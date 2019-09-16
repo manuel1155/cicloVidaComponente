@@ -1,0 +1,14 @@
+<div class="card" style="width: 18rem;">
+    <img class="card-img-top" [src]="displayImagen" alt="Mango">
+    <div class="card-body">
+      <h5 class="card-title"> {{ nombre }}</h5>
+      <p class="card-text"> {{ descripcion }}</p>
+      <p class="card-text">
+          <b>Vitaminas: </b> 
+          <span class="badge badge-info" *ngFor="let vitamina of otros">{{ vitamina }}</span>
+        </p>
+      <a [href]="url" class="btn btn-primary">Más información...</a>
+      <button type="button" class="btn btn-success" *ngIf="imagen2" [disabled]="displayImagen==imagen1" (click)="changeImagen();">Imagen 1</button>
+      <button type="button" class="btn btn-success" *ngIf="imagen2" [disabled]="displayImagen==imagen2" (click)="changeImagen();">Imagen 2</button>
+    </div>
+</div>
