@@ -1,0 +1,133 @@
+<div class="card m-3">
+    <h5 class="card-header">Formulario Cliente</h5>
+    <div class="card-body">
+        <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()"> 
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <label>Nombres</label>
+                    <input type="text" class="form-control" formControlName="nombres" [ngClass]="{ 'is-invalid': submitted && f.nombres.errors }"/>
+                    <div *ngIf="submitted && f.nombres.errors" class="invalid-feedback">
+                        <div *ngIf="f.nombres.errors.required">El campo nombres es requerido</div>
+                    </div>
+                </div>
+
+                <div class="form-group col-5">
+                    <label>Apellidos</label>
+                    <input type="text" class="form-control" formControlName="apellidos" [ngClass]="{ 'is-invalid': submitted && f.apellidos.errors }"/>
+                    <div *ngIf="submitted && f.apellidos.errors" class="invalid-feedback">
+                        <div *ngIf="f.apellidos.errors.required">El campo apellidos es requerido</div>
+                    </div>
+                </div>
+                <div class="form-group col-2">
+                    <label>Se enteró:</label>
+                    <select class="form-control" formControlName="entero" [ngClass]="{ 'is-invalid': submitted && f.entero.errors }">
+                        <option value=""></option>
+                        <option value="Página Web">Página Web</option>
+                        <option value="Llamada Telefónica">Llamada Telefónica</option>
+                        <option value="Visita a tienda">Visita a tienda</option>
+                    </select>
+                    <div *ngIf="submitted && f.entero.errors" class="invalid-feedback">
+                        <div *ngIf="f.entero.errors.required">Este campo es requerido</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="text" formControlName="correo" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.correo.errors }" />
+                <div *ngIf="submitted && f.correo.errors" class="invalid-feedback">
+                    <div *ngIf="f.correo.errors.required">El e-mail es requerido</div>
+                    <div *ngIf="f.correo.errors.email">El formato de correo no es valido</div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Contraseña</label>
+                    <input type="password" formControlName="pass" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.pass.errors }" />
+                    <div *ngIf="submitted && f.pass.errors" class="invalid-feedback">
+                        <div *ngIf="f.pass.errors.required">La contraseña es requerida</div>
+                        <div *ngIf="f.pass.errors.minlength">La contraseña debe de tener 6 ó más caracteres</div>
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <label>Confirmar contraseña</label>
+                    <input type="password" formControlName="confirmPass" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.confirmPass.errors }" />
+                    <div *ngIf="submitted && f.confirmPass.errors" class="invalid-feedback">
+                        <div *ngIf="f.confirmPass.errors.required">Debe de confirmar su contraseña</div>
+                        <div *ngIf="f.confirmPass.errors.validarPass">No coinciden las contraseñas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Hijos</label>
+                    <select formControlName="numHijos" class="form-control" (change)="onChangeHijos($event)" [ngClass]="{ 'is-invalid': submitted && f.numHijos.errors }">
+                        <option value=""></option>
+                        <option *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">{{i}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.numHijos.errors" class="invalid-feedback">
+                        <div *ngIf="f.numHijos.errors.required">Numero de hijos es requerido.</div>
+                    </div>
+                    <button type="button" *ngIf="h.controls.length>0" class="btn btn-warning" (click)="onClear()">Limpiar campos</button>
+                </div>
+            </div>
+
+            <div *ngFor="let hijo of h.controls; let i = index" class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <h5 class="card-title">Hijo No. {{i + 1}}</h5>
+                        <div [formGroup]="hijo" class="form-row">
+                            <div class="form-group col-8">
+                                <label>Nombre completo</label>
+                                <input type="text" formControlName="nombrehijo" class="form-control" [ngClass]="{ 'is-invalid': submitted && hijo.controls.nombrehijo.errors }" />
+                                <div *ngIf="submitted && hijo.controls.nombrehijo.errors" class="invalid-feedback">
+                                    <div *ngIf="hijo.controls.nombrehijo.errors.required">Se requiren los nombres</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-4">
+                                <label>Edad</label>
+                                <input type="number" formControlName="edad" class="form-control" [ngClass]="{ 'is-invalid': submitted && hijo.controls.edad.errors }" />
+                                <div *ngIf="submitted && hijo.controls.edad.errors" class="invalid-feedback">
+                                    <div *ngIf="hijo.controls.edad.errors.required">Se requiere la edad</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit" > {{ currentCli==null ? 'Reguistrar' : 'Guardar Cambios' }}</button>  
+                <button class="btn btn-danger" type="reset" (click)="onReset()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--
+<pre> {{ clienteForm.value | json }} </pre>
+<p> {{ clienteForm.valid }} </p>
+-->
+
+<table class="table" *ngIf="verTabla">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Nombre(s)</th>
+            <th scope="col">Apellido(s)</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Hijos</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cli of clientesList; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ cli.nombres }}</td>
+            <td>{{ cli.apellidos }}</td>
+            <td>{{ cli.correo }}</td>
+            <td>{{ cli.hijos.length }}</td>
+            <td><button type="button" class="btn btn-outline-primary" (click)="editCliente(cli.id)">Editar</button></td>
+            <td><button type="button" class="btn btn-outline-danger">Eliminar</button></td>
+          </tr>
+        </tbody>
+      </table>
